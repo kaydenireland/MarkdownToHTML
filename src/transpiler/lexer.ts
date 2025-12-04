@@ -3,7 +3,8 @@ export enum TokenType {
     TEXT = "text",
     ITALIC = "italic",
     NEWLINE = "newline",
-    INVALID = "invalid"
+    INVALID = "invalid",
+    META = "meta"
 }
 
 export type Token = {
@@ -23,14 +24,7 @@ enum LexerState {
 }
 
 const TOKEN_CHARS: string[] = ['_', '#']
-
-export type Lexer = {
-    input: string;
-    len: number;
-    idx: number;
-    buffer: string;
-    state: LexerState;
-}
+const DELIMITERS: string[] = [' ', '\n'].concat(TOKEN_CHARS);
 
 export function tokenize(input: string): Token[] {
     const tokens: Token[] = [];
@@ -65,7 +59,7 @@ export function tokenize(input: string): Token[] {
                         tokens.push( { type: TokenType.NEWLINE, literal: "\\n" });
                         break;
                     default: 
-                        if (!TOKEN_CHARS.includes(char)){
+                        if (!DELIMITERS.includes(char)){
                             state = LexerState.TEXT;
                             buffer += char;
                         }else {
@@ -76,7 +70,7 @@ export function tokenize(input: string): Token[] {
                 break;
             }
             case LexerState.TEXT: {
-                if (!TOKEN_CHARS.includes(char)){
+                if (!DELIMITERS.includes(char)){
                     buffer += char;
                 }else {
                     if (TOKEN_CHARS.includes(char) && !shouldBeToken(idx, input)) {
@@ -99,8 +93,6 @@ export function tokenize(input: string): Token[] {
 
 function shouldBeToken(idx: number, input: string): boolean {
 
-    let delimiters: string[] = [' ', '\n'].concat(TOKEN_CHARS);
-
     if (!TOKEN_CHARS.includes(input[idx])) {
         return false;
     }
@@ -109,5 +101,5 @@ function shouldBeToken(idx: number, input: string): boolean {
     let prev = input[idx - 1] ?? ' ';
     let next = input[idx + 1] ?? ' ';
 
-    return delimiters.includes(prev) || delimiters.includes(next);
+    return DELIMITERS.includes(prev) || DELIMITERS.includes(next);
 }
