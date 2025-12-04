@@ -24,7 +24,15 @@ enum LexerState {
 
 const TOKEN_CHARS: string[] = ['_', '#']
 
-export function tokenize(input: string) {
+export type Lexer = {
+    input: string;
+    len: number;
+    idx: number;
+    buffer: string;
+    state: LexerState;
+}
+
+export function tokenize(input: string): Token[] {
     const tokens: Token[] = [];
     let len = input.length;
     let idx: number = 0;
@@ -57,7 +65,7 @@ export function tokenize(input: string) {
                         tokens.push( { type: TokenType.NEWLINE, literal: "\\n" });
                         break;
                     default: 
-                        if (isText(char)){
+                        if (!TOKEN_CHARS.includes(char)){
                             state = LexerState.TEXT;
                             buffer += char;
                         }else {
@@ -68,7 +76,7 @@ export function tokenize(input: string) {
                 break;
             }
             case LexerState.TEXT: {
-                if (isText(char)){
+                if (!TOKEN_CHARS.includes(char)){
                     buffer += char;
                 }else {
                     if (TOKEN_CHARS.includes(char) && !shouldBeToken(idx, input)) {
@@ -88,15 +96,6 @@ export function tokenize(input: string) {
     return tokens;
 }
 
-function isText(ch: string): boolean {
-    const code = ch.charCodeAt(0);
-
-    const isDigit  = code >= 48 && code <= 57;   // 0–9
-    const isUpper  = code >= 65 && code <= 90;   // A–Z
-    const isLower  = code >= 97 && code <= 122;  // a–z
-
-    return isDigit || isUpper || isLower;
-}
 
 function shouldBeToken(idx: number, input: string): boolean {
 

@@ -14,9 +14,7 @@ function App() {
   return (
     <div className="App">
       <textarea className="src" onChange={ e => onSourceChange(e.target.value)} />
-      <div className="output">
-        <pre>{output}</pre>
-      </div>
+      <textarea readOnly className="output" value={output}> </textarea>
     </div>
   );
 }
