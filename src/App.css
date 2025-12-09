@@ -15,6 +15,13 @@
   align-items: center;
   justify-content: space-between;
   padding: 0 12px;
+
+  
+  min-height: 40px;
+  flex-shrink: 0;
+  position: relative;
+  white-space: nowrap;
+  overflow: hidden;  
 }
 
 .topbar label {
@@ -28,10 +35,23 @@
   gap: 16px;
 }
 
+.center {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  font-weight: bold;
+}
+
 .right {
   display: flex;
+  align-items: center;
   gap: 16px;
-  padding-right: 24px;
+}
+
+.copyBtn {
+  padding: 4px 8px;
+  font-size: 12px;
+  cursor: pointer;
 }
 
 .main {

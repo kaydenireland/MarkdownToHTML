@@ -53,13 +53,11 @@ export function tokenize(input: string): Token[] {
                     case '_': 
                         tokens.push( { type: TokenType.ITALIC, literal: char });
                         break;
-                    case ' ':
-                        break;
                     case '\n': 
                         tokens.push( { type: TokenType.NEWLINE, literal: "\\n" });
                         break;
                     default: 
-                        if (!DELIMITERS.includes(char)){
+                        if (!TOKEN_CHARS.includes(char) && char !== "\n"){
                             state = LexerState.TEXT;
                             buffer += char;
                         }else {

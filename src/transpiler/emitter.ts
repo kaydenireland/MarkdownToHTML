@@ -32,7 +32,7 @@ export default function emit(ast: AST, emitDebug: boolean, parseDebug: boolean):
     return output;
 }
 
-function emitNode(node: Node, emitter: Emitter): string {
+function emitNode(node: Node, emitter: Emitter, isInLine: boolean = false): string {
     switch (node.type) {
         case NodeType.HEADING: {
             emitter.log.info("emit_heading()");
@@ -51,7 +51,7 @@ function emitNode(node: Node, emitter: Emitter): string {
         default: {
             emitter.log.info("emit_text()");
             emitter.log.increaseIndent();
-            let out = emitText(node as TextNode, emitter);
+            let out = emitText(node as TextNode, isInLine);
             emitter.log.decreaseIndent();
             return out;
         }
@@ -59,11 +59,11 @@ function emitNode(node: Node, emitter: Emitter): string {
 }
 
 function emitHeading(node: HeadingNode, emitter: Emitter): string {
-    let level = node.level;
+    let level = node.level > 6 ? 6 : node.level;
     let output = `<h${level}>`;
 
     for (const child of node.content) {
-        output += emitNode(child, emitter);
+        output += emitNode(child, emitter, true);
     }
 
     output += `</h${level}>\n`;
@@ -75,12 +75,12 @@ function emitItalic(node: ItalicNode, emitter: Emitter): string {
     let output = "";
 
     for (const child of node.content) {
-        output += emitNode(child, emitter);
+        output += emitNode(child, emitter, true);
     }
 
-    return `<i>${output}</i>`;
+    return `<em>${output}</em>`;
 }
 
-function emitText(node: TextNode, emitter: Emitter): string {
+function emitText(node: TextNode, isInline: boolean): string {
     return node.content;
 }

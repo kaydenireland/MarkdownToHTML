@@ -33,11 +33,16 @@ function App() {
         </label>
       </div>
 
+      <div className="center">
+        Markdown to HTML Converter
+      </div>
+
       <div className="right">
         <label>
           <input type="checkbox" checked={showRawHtml} onChange={() => setShowRawHtml(v => !v)}/>
           Raw HTML
         </label>
+        <button className = "copyButton" onClick = {() => navigator.clipboard.writeText(output)}>Copy Raw</button>
       </div>
     </div>
 
