@@ -8,7 +8,7 @@ export enum NodeType {
 }
 
 type BaseNode = {
-    type: string
+    type: NodeType
 }
 
 export type HeadingNode = BaseNode & {
@@ -96,7 +96,7 @@ function parseHeading(parser: Parser): HeadingNode {
     parser.log.increaseIndent();
 
     let node: HeadingNode = {
-        type: "heading",
+        type: NodeType.HEADING,
         level: 1,
         content: []
     };
@@ -126,7 +126,7 @@ function parseItalic(parser: Parser): ItalicNode {
     parser.log.increaseIndent();
 
     let node: ItalicNode = {
-        type: "italic",
+        type: NodeType.ITALIC,
         content: []
     };
 
@@ -151,5 +151,5 @@ function parseItalic(parser: Parser): ItalicNode {
 }
 
 function parseText(token: Token): TextNode {
-    return { type: "text", content: token.literal };
+    return { type: NodeType.TEXT, content: token.literal };
 }

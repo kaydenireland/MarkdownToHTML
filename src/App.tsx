@@ -2,6 +2,7 @@ import './App.css';
 import { useState } from 'react';
 import { tokenize, tokensToString } from './transpiler/lexer';
 import { parse, toString } from './transpiler/parser';
+import emit from './transpiler/emitter';
 
 function App() {
 
@@ -9,8 +10,9 @@ function App() {
 
   function onSourceChange(src: string) {
     let tokenized = tokenize(src);
-    let parsed = toString(parse(tokenized, true));
-    setOutput(parsed)
+    let parsed = parse(tokenized, false);
+    let html = emit(parsed, false);
+    setOutput(html)
   }
 
   return (
