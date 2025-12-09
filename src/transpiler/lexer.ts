@@ -72,6 +72,8 @@ export function tokenize(input: string): Token[] {
             case LexerState.TEXT: {
                 if (!DELIMITERS.includes(char)){
                     buffer += char;
+                } else if (char === ' ') {
+                    buffer += char;
                 }else {
                     if (TOKEN_CHARS.includes(char) && !shouldBeToken(idx, input)) {
                         buffer += char;

@@ -1,14 +1,16 @@
 import './App.css';
 import { useState } from 'react';
 import { tokenize, tokensToString } from './transpiler/lexer';
+import { parse, toString } from './transpiler/parser';
 
 function App() {
 
   const [output, setOutput] = useState("")
 
   function onSourceChange(src: string) {
-    let tokens = tokensToString(tokenize(src))
-    setOutput(tokens)
+    let tokenized = tokenize(src);
+    let parsed = toString(parse(tokenized, true));
+    setOutput(parsed)
   }
 
   return (
