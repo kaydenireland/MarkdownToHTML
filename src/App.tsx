@@ -6,21 +6,52 @@ import emit from './transpiler/emitter';
 
 function App() {
 
-  const [output, setOutput] = useState("")
+  const [output, setOutput] = useState("");
+  const [debugParser, setDebugParser] = useState(false);
+  const [debugEmitter, setDebugEmitter] = useState(false);
+  const [showRawHtml, setShowRawHtml] = useState(false);
 
   function onSourceChange(src: string) {
-    let tokenized = tokenize(src);
-    let parsed = parse(tokenized, false);
-    let html = emit(parsed, false);
-    setOutput(html)
+    const tokenized = tokenize(src);
+    const parsed = parse(tokenized, debugParser);
+    const html = emit(parsed, debugEmitter, debugParser);
+    setOutput(html);
   }
 
   return (
-    <div className="App">
-      <textarea className="src" onChange={ e => onSourceChange(e.target.value)} />
-      <textarea readOnly className="output" value={output}> </textarea>
+  <div className="App">
+    <div className="topbar">
+      <div className="left">
+        <label>
+          <input type="checkbox" checked={debugParser} onChange={() => setDebugParser(v => !v)} />
+          Parser Debug
+        </label>
+
+        <label>
+          <input type="checkbox" checked={debugEmitter} onChange={() => setDebugEmitter(v => !v)} />
+          Emitter Debug
+        </label>
+      </div>
+
+      <div className="right">
+        <label>
+          <input type="checkbox" checked={showRawHtml} onChange={() => setShowRawHtml(v => !v)}/>
+          Raw HTML
+        </label>
+      </div>
     </div>
-  );
+
+    <div className="main">
+      <textarea className="src" onChange={e => onSourceChange(e.target.value)} />
+
+      {showRawHtml ? (
+        <textarea  readOnly  className="output" value={output} />
+      ) : (
+        <div className="renderedOutput" dangerouslySetInnerHTML={{ __html: output }} />
+      )}
+    </div>
+  </div>
+);
 }
 
 export default App;

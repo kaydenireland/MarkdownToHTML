@@ -61,6 +61,8 @@ export function parse(tokens: Token[], _debug: boolean): AST {
 
     let ast: AST = { body: [] };
 
+    parser.log.info("\n\nParse Tree: \n\n");
+
     parser.log.info("parse_document()");
     parser.log.increaseIndent();
 

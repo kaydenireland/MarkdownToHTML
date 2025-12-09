@@ -5,16 +5,21 @@ type Emitter = {
     log: Logger,
 }
 
-export default function emit(ast: AST, _debug: boolean): string {
+export default function emit(ast: AST, emitDebug: boolean, parseDebug: boolean): string {
 
     let emitter: Emitter = {
-        log: new Logger(_debug),
+        log: new Logger(emitDebug),
     };
 
     let output: string = "";
     let nodes = ast.body;
 
-    emitter.log.clear();
+    if (!parseDebug) {
+        emitter.log.clear();
+    }
+
+    emitter.log.info("\n\nConverting to HTML: \n\n");
+
     emitter.log.info("emit_document()")
     emitter.log.increaseIndent();
 

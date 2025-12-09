@@ -16,7 +16,9 @@ export class Logger {
     }
 
     public clear(): void {
-        console.clear();
+        if (this._debug){
+            console.clear();
+        }
     }
 
     public increaseIndent(): void {
